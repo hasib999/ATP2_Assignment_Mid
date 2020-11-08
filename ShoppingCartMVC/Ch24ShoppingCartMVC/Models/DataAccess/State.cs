@@ -12,24 +12,18 @@ namespace Ch24ShoppingCartMVC.Models.DataAccess
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class State
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
+        public State()
         {
-            this.LineItems = new HashSet<LineItem>();
+            this.Customers = new HashSet<Customer>();
         }
     
-        public string ProductID { get; set; }
-        public string Name { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
-        public string CategoryID { get; set; }
-        public string ImageFile { get; set; }
-        public decimal UnitPrice { get; set; }
-        public int OnHand { get; set; }
+        public string StateCode { get; set; }
+        public string StateName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LineItem> LineItems { get; set; }
+        public virtual ICollection<Customer> Customers { get; set; }
     }
 }
