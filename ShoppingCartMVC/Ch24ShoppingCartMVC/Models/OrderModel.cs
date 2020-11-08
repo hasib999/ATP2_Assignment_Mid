@@ -78,12 +78,6 @@ namespace Ch24ShoppingCartMVC.Models {
             else
                 //Get the product from the products where ProductID is matched with id (Using Lambda expression)
                 return products.Where(p => p.ProductID.Equals(id)).FirstOrDefault();
-        }
-              
-        
-        
-        
-        
-        
+        }   
     }
 }
