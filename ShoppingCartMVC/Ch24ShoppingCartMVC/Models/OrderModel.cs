@@ -15,8 +15,8 @@ namespace Ch24ShoppingCartMVC.Models {
         {
             using (HalloweenEntities data = new HalloweenEntities()) 
             {  //get all the products from the Collection Products order by name using HalloweenEntities
-                
-                return 
+
+                return data.Products.OrderBy(p => p.Name).ToList();
             }
         }
         //Implement the method ConvertToViewModel
@@ -29,6 +29,7 @@ namespace Ch24ShoppingCartMVC.Models {
             model.LongDescription = product.LongDescription;
             model.UnitPrice = product.UnitPrice;
             model.ImageFile = product.ImageFile;
+            model.Quantity = product.OnHand;
             //implement other required properties
             
             return model;
@@ -38,19 +39,19 @@ namespace Ch24ShoppingCartMVC.Models {
             if (this.products == null)
             //Call the method GetAllProducts
             {
-                ProductViewModel model = new ProductViewModel();
+                products = GetAllProducts();
             }
             //Return the products
-            return 
+            return products;
         }
         public List<ProductViewModel> GetAllProducts()
         {
             List<ProductViewModel> productmodels = new List<ProductViewModel>();
             // Call the GetAllProductsFromDataStore()
-            
+            var products = GetAllProductsFromDataStore();
             foreach (Product p in products)
             {  //Call the method ConvertToViewModel to convert p and pass the method ConvertToViewModel to the method add of the productmodels
-                
+                productmodels.Add(ConvertToViewModel(p));
             }
             return productmodels;
         }
@@ -59,24 +60,24 @@ namespace Ch24ShoppingCartMVC.Models {
         {
             using (HalloweenEntities data = new HalloweenEntities())
             {  //Get a product from Products of data where ProductID is matched with id parameter
-                return .FirstOrDefault();
+                return data.Products.Where(p=>p.ProductID.Equals(id)).FirstOrDefault();
             }
         }
         public OrderViewModel GetOrderInfo(string id)
         {
             OrderViewModel order = new OrderViewModel();
             //Call the method GetSelectedProduct and assign the return value to SelectedProduct property
-            
+            order.SelectedProduct = GetSelectedProduct(id);
             return order;
         }  
         public ProductViewModel GetSelectedProduct(string id)
         {
             if (this.products == null)
                 //call the method ConvertToViewModel and pass the method GetProductByIdFromDataStore(id)
-                return 
+                return ConvertToViewModel(GetProductByIdFromDataStore(id));
             else
                 //Get the product from the products where ProductID is matched with id (Using Lambda expression)
-                return 
+                return products.Where(p => p.ProductID.Equals(id)).FirstOrDefault();
         }
               
         

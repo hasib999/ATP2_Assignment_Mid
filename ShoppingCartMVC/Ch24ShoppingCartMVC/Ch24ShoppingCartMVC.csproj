@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -20,6 +21,10 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -61,9 +72,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -135,6 +143,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CartModel.cs" />
+    <Compile Include="Models\DataAccess\Category.cs">
+      <DependentUpon>Halloween.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataAccess\Customer.cs">
+      <DependentUpon>Halloween.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataAccess\Halloween.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -150,7 +164,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Halloween.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataAccess\Invoice.cs">
+      <DependentUpon>Halloween.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataAccess\InvoiceData.cs">
+      <DependentUpon>Halloween.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataAccess\LineItem.cs">
+      <DependentUpon>Halloween.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataAccess\Product.cs">
+      <DependentUpon>Halloween.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataAccess\State.cs">
       <DependentUpon>Halloween.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OrderModel.cs" />
@@ -253,20 +279,20 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Halloween.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Models\DataAccess\Halloween.edmx.diagram">
+      <DependentUpon>Halloween.edmx</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Models\DataAccess\Halloween.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Halloween.edmx</DependentUpon>
       <LastGenOutput>Halloween.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\DataAccess\Halloween.edmx.diagram">
-      <DependentUpon>Halloween.edmx</DependentUpon>
     </Content>
     <Content Include="Models\DataAccess\Halloween.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Halloween.edmx</DependentUpon>
       <LastGenOutput>Halloween.cs</LastGenOutput>
     </Content>
-    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\halloween.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -303,7 +329,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -338,6 +363,14 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
