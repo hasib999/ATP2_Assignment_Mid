@@ -54,8 +54,10 @@ namespace Ch24ShoppingCartMVC.Models{
                 //Find the product in the car that matches the id using lambda expression.
                 var inCart = GetCartFromDataStore().Where(p => p.ProductID.Equals(pID)).FirstOrDefault();
                 if (inCart == null)
-                    //Call the method AddItemToDataStore
+                //Call the method AddItemToDataStore
+                {
                     AddItemToDataStore(model);
+                }
                 else
                     //Increase the Quantity by the quantity of the added product
                     inCart.Quantity += model.AddedProduct.Quantity;
